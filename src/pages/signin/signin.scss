@@ -1,0 +1,18 @@
+page-signin {
+    .signup {
+        margin: auto;
+        margin-top: 30px;
+    }
+    form {
+        ion-input {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+        }
+    }
+    .forgot-password {
+        float: right;
+        color: blue;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}

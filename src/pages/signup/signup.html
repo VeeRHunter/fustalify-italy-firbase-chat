@@ -1,0 +1,46 @@
+<!--
+  Generated template for the SignupPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>signup</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form #signupUser="ngForm" id="signupUser" (ngSubmit)="register(signupUser)" novalidate>
+    <ion-list no-lines>
+      <ion-item>
+        <ion-input type="text" [formControl]="fullnameFormControl" [(ngModel)]="userData.fullname" required name="fullname"
+          placeholder="Full Name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input type="text" [formControl]="usernameFormControl" [(ngModel)]="userData.username" required name="username"
+          placeholder="User Name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input type="email" [formControl]="emailFormControl" [(ngModel)]="userData.email" required name="emailaddress"
+          placeholder="Email address"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input type="number" [formControl]="phoneFormControl" [(ngModel)]="userData.phone" required name="phonename"
+          placeholder="Phone number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input type="password" [formControl]="passwordFormControl" [(ngModel)]="userData.password" required name="passwordname"
+          placeholder="Password"></ion-input>
+      </ion-item>
+      <div padding>
+        <button ion-button block color="primary" color="primary" [disabled]="!signupUser.valid">Register
+          Now</button>
+      </div>
+      <ion-row ion-button block clear color="dark" (click)="closeModel()">cancel</ion-row>
+    </ion-list>
+  </form>
+</ion-content>
