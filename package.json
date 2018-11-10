@@ -31,6 +31,7 @@
     "@ionic-native/status-bar": "~4.15.0",
     "@ionic/storage": "2.2.0",
     "angularfire2": "^5.1.0",
+    "cordova-android-play-services-gradle-release": "^1.4.6",
     "cordova-android-support-gradle-release": "^1.4.7",
     "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-contacts": "^3.0.1",
@@ -49,7 +50,8 @@
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.3.3",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "cordova-android": "~6.4.0"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.0",
@@ -73,8 +75,11 @@
       },
       "cordova-android-support-gradle-release": {
         "ANDROID_SUPPORT_VERSION": "27.+"
-      }
+      },
+      "cordova-android-play-services-gradle-release": {}
     },
-    "platforms": []
+    "platforms": [
+      "android"
+    ]
   }
 }

@@ -198,11 +198,11 @@ export class FirebaseProvider {
   }
 
   setOnlineState() {
-    firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'online': true });
+    firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'state': "Online" });
   }
 
   setOfflineState() {
-    firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'online': false });
+    firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'state': "Offline" });
   }
 
 }

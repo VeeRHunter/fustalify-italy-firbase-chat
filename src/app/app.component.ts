@@ -21,12 +21,12 @@ export class MyApp {
       splashScreen.hide();
       platform.pause.subscribe(() => {
         if (firebase.auth().currentUser) {
-          firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'online': false });
+          firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'state': "Offline" });
         }
       });
       platform.resume.subscribe(() => {
         if (firebase.auth().currentUser && localStorage.getItem('showOnline') == 'true')
-          firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'online': true });
+          firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'state': "Online" });
       })
     });
   }

@@ -71,7 +71,7 @@ export class SignupPage {
             name: this.userData.fullname,
             userId: user.uid,
             email: user.email,
-            online: true,
+            state: "Online",
             phonenumber: this.userData.phone,
             description: "I am available",
             provider: "Email",

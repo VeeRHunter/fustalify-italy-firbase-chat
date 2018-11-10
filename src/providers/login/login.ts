@@ -38,7 +38,7 @@ export class LoginProvider {
     firebase.auth().signInWithEmailAndPassword(email, password).then((success) => {
       this.loadingProvider.hide();
       console.log('success');
-      this.saveCurrentUser(email);
+      this.saveCurrentUser(email, password);
       this.firebaseProvider.setOnlineState();
       this.navCtrl.setRoot(ConnectUserPage);
     }, error => {
@@ -48,8 +48,18 @@ export class LoginProvider {
     });
   }
 
-  saveCurrentUser(email) {
-    localStorage.setItem('currentUser', email);
+  saveCurrentUser(email, password) {
+    const userInfo = { "email": email, "password": password };
+    localStorage.setItem('currentUser', JSON.stringify(userInfo));
+  }
+
+  getCurrentLoggedUser() {
+    if (localStorage.getItem("currentUser") === null || localStorage.getItem("currentUser") === ""
+      || typeof (localStorage.getItem("currentUser")) === "undefined") {
+      return "";
+    } else {
+      return JSON.parse(localStorage.getItem("currentUser"));
+    }
   }
 
   sendPasswordReset(email) {

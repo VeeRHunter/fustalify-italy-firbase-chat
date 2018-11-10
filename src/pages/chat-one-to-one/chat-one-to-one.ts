@@ -39,8 +39,11 @@ export class ChatOneToOnePage {
   public loggedInUserId: any;
   public messagesFromServer: any = {};
   public userFromServer: any = {};
+  public chatUserFromServer: any = {};
   public conversationIdFromServer: any = {};
   public unreadMessage = 0;
+  public totalMessageLength = 0;
+  public chatUserImage = '';
 
   constructor(
     public navCtrl: NavController,
@@ -72,6 +75,27 @@ export class ChatOneToOnePage {
       this.title = this.userFromServer.payload.val().name;
     });
 
+    this.angularfire.object('/accounts/' + this.userId + '/conversations/' + this.loggedInUserId).snapshotChanges().subscribe((chatUser) => {
+      this.chatUserFromServer = chatUser;
+      if (this.chatUserFromServer.payload.exists()) {
+        this.unreadMessage = this.chatUserFromServer.payload.val().messagesRead;
+      }
+    }, err => {
+      console.log(err);
+    });
+    this.dataProvider.getUser(this.userId).snapshotChanges().subscribe((result) => {
+      this.chatUserFromServer = result.payload.val();
+      console.log(this.chatUserFromServer);
+      console.log(this.chatUserFromServer.conversations);
+      this.chatUserImage = this.chatUserFromServer.img;
+      for (var key in this.chatUserFromServer.conversations) {
+        console.log(this.chatUserFromServer.conversations[key].messagesRead);
+        this.unreadMessage = this.chatUserFromServer.conversations[key].messagesRead;
+      }
+    }, err => {
+      console.log(err);
+    })
+
     // Get conversationInfo with friend.
     this.angularfire.object('/accounts/' + this.loggedInUserId + '/conversations/' + this.userId).snapshotChanges().subscribe((conversation) => {
       if (conversation.payload.exists()) {
@@ -79,7 +103,6 @@ export class ChatOneToOnePage {
         // User already have conversation with this friend, get conversation
         this.conversationIdFromServer = conversation;
         this.conversationId = this.conversationIdFromServer.payload.val().conversationId;
-        this.unreadMessage = this.conversationIdFromServer.payload.val().messagesRead;
 
         // Get conversation
         this.dataProvider.getConversationMessages(this.conversationId).snapshotChanges().subscribe((messagesRes) => {
@@ -128,6 +151,11 @@ export class ChatOneToOnePage {
             }
             this.loadingProvider.hide();
           }
+          if (this.messages) {
+            this.totalMessageLength = this.messages.length;
+          }
+          console.log(this.totalMessageLength);
+          console.log(this.unreadMessage);
           if (localStorage.getItem('loadMore') === 'loadMoreMessage') {
             this.scrollTop();
           } else {

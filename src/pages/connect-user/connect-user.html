@@ -15,10 +15,17 @@
 
 <ion-content padding>
   <ion-row class="new-friend-list">
-    <ion-row class="each-friend" *ngFor="let list of newFriendsList; let i = index">
-      <span (click)="gotoMessage(i)">
+    <ion-row class="title-friend">
+      <span class="item-left">
+        User Name
+      </span>
+      <span class="item-right">User State</span>
+    </ion-row>
+    <ion-row class="each-friend" *ngFor="let list of newFriendsList; let i = index" (click)="gotoMessage(i)">
+      <span class="item-left">
         {{list.username}}
       </span>
+      <span class="item-right">{{list.state}}</span>
     </ion-row>
   </ion-row>
 </ion-content>

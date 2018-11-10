@@ -10,4 +10,12 @@ page-chat-one-to-one {
     .chatbox-image {
         width: 100%;
     }
+    .user-avatar {
+        img {
+            margin-left: auto;
+            float: right;
+            width: 20px;
+            border-radius: 50%;
+        }
+    }
 }

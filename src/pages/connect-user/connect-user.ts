@@ -68,7 +68,6 @@ export class ConnectUserPage {
 
         for (let list of accounts) {
           this.eachUser = list.payload.val();
-          console.log(`NULRA CHECKING: ${this.eachUser.userId} ${this.eachUser.userId}`);
           if (this.currentUser.userId !== this.eachUser.userId) {
             this.newFriendsList.push(list.payload.val());
           }

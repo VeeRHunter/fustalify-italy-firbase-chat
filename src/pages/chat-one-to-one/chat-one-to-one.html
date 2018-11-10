@@ -8,6 +8,11 @@
     <p class="center" *ngIf="startIndex > 0"><span tappable (click)="loadPreviousMessages()">Load previous messages</span></p>
 
     <div *ngFor="let message of messagesToShow; let i = index;">
+      <div *ngIf="isSender(message) && unreadMessage === i" class="chatbox item-right">
+        <div class="user-avatar">
+          <img src="{{chatUserImage}}" class="item-right" />
+        </div>
+      </div>
       <div *ngIf="isSender(message)" class="chatbox right">
         <div *ngIf="message.type == 'text'">
           <p>{{message.message}}</p>
@@ -22,10 +27,9 @@
             <source src="{{message.message}}" type="video/mp4">
           </video>
         </div>
-        <!-- <div class="user-avatar" *ngIf="unreadMessage == i">
-          <img src="{{message.avatar}}" />
-        </div> -->
       </div>
+
+
       <div *ngIf="!isSender(message)" class="chatbox left">
         <div *ngIf="message.type == 'text'">
           <p>{{message.message}}</p>
@@ -39,6 +43,12 @@
           <video controls width="100%">
             <source src="{{message.message}}" type="video/mp4">
           </video>
+        </div>
+      </div>
+
+      <div *ngIf="unreadMessage === totalMessageLength && unreadMessage === i + 1" class="chatbox item-right">
+        <div class="user-avatar">
+          <img src="{{chatUserImage}}" class="item-right" />
         </div>
       </div>
     </div>

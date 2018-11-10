@@ -38,6 +38,13 @@ export class SigninPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SigninPage');
+    if (this.loginProvider.getCurrentLoggedUser() === "") {
+
+    } else {
+      this.userData.email = this.loginProvider.getCurrentLoggedUser().email;
+      this.userData.password = this.loginProvider.getCurrentLoggedUser().password;
+      this.loginProvider.emailLogin(this.userData.email, this.userData.password);
+    }
   }
 
   login(signinUser) {
