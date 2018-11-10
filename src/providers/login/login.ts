@@ -7,6 +7,7 @@ import { AlertProvider } from '../alert/alert';
 import { NavController } from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
 import { ConnectUserPage } from '../../pages/connect-user/connect-user';
+import { FirebaseProvider } from '../firebase/firebase';
 
 /*
   Generated class for the LoginProvider provider.
@@ -22,6 +23,7 @@ export class LoginProvider {
   constructor(public loadingProvider: LoadingProvider,
     public http: HttpClient,
     public alertProvider: AlertProvider,
+    public firebaseProvider: FirebaseProvider,
   ) {
     console.log('Hello LoginProvider Provider');
   }
@@ -37,6 +39,7 @@ export class LoginProvider {
       this.loadingProvider.hide();
       console.log('success');
       this.saveCurrentUser(email);
+      this.firebaseProvider.setOnlineState();
       this.navCtrl.setRoot(ConnectUserPage);
     }, error => {
       this.loadingProvider.hide();

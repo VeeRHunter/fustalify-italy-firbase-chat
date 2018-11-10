@@ -1,18 +1,58 @@
-<!--
-  Generated template for the ChatOneToOnePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>chat-one-to-one</ion-title>
+  <ion-navbar color="white">
+    <ion-title (click)="viewUser(userId)">{{title}}</ion-title>
   </ion-navbar>
-
 </ion-header>
+<ion-content has-footer>
+  <div class="messages">
+    <p class="center" *ngIf="startIndex > 0"><span tappable (click)="loadPreviousMessages()">Load previous messages</span></p>
 
+    <div *ngFor="let message of messagesToShow; let i = index;">
+      <div *ngIf="isSender(message)" class="chatbox right">
+        <div *ngIf="message.type == 'text'">
+          <p>{{message.message}}</p>
+        </div>
+        <div *ngIf="message.type == 'location'" [innerHtml]="message.message"></div>
+        <div *ngIf="message.type == 'contact'" [innerHtml]="message.message"></div>
+        <div *ngIf="message.type == 'image'">
+          <img tappable (click)="enlargeImage(message.message)" class="chatbox-image" src="{{message.message}}" />
+        </div>
+        <div *ngIf="message.type == 'video'">
+          <video controls width="100%">
+            <source src="{{message.message}}" type="video/mp4">
+          </video>
+        </div>
+        <!-- <div class="user-avatar" *ngIf="unreadMessage == i">
+          <img src="{{message.avatar}}" />
+        </div> -->
+      </div>
+      <div *ngIf="!isSender(message)" class="chatbox left">
+        <div *ngIf="message.type == 'text'">
+          <p>{{message.message}}</p>
+        </div>
+        <div *ngIf="message.type == 'location'" [innerHtml]="message.message"></div>
+        <div *ngIf="message.type == 'contact'" [innerHtml]="message.message"></div>
+        <div *ngIf="message.type == 'image'">
+          <img tappable (click)="enlargeImage(message.message)" class="chatbox-image" src="{{message.message}}" />
+        </div>
+        <div *ngIf="message.type == 'video'">
+          <video controls width="100%">
+            <source src="{{message.message}}" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
 
-<ion-content padding>
-
+  </div>
 </ion-content>
+<ion-footer>
+  <ion-item class="bottom_bar">
+    <button item-left ion-button clear (click)="attach()">
+      <ion-icon name="md-attach"></ion-icon>
+    </button>
+    <ion-textarea type="text" rows="0" placeholder="Type your message" [(ngModel)]="message"></ion-textarea>
+    <button item-right ion-button clear (click)="send('text')" [disabled]="!message">
+      <ion-icon name="md-send"></ion-icon>
+    </button>
+  </ion-item>
+</ion-footer>

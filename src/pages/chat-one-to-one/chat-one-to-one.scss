@@ -1,3 +1,13 @@
 page-chat-one-to-one {
-
+    ion-textarea {
+        font-size: 12px;
+        resize: both;
+    }
+    .sender {
+        width: 70%;
+        float: left;
+    }
+    .chatbox-image {
+        width: 100%;
+    }
 }

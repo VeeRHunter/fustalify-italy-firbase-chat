@@ -20,8 +20,9 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
       platform.pause.subscribe(() => {
-        if (firebase.auth().currentUser)
+        if (firebase.auth().currentUser) {
           firebase.database().ref('accounts/' + firebase.auth().currentUser.uid).update({ 'online': false });
+        }
       });
       platform.resume.subscribe(() => {
         if (firebase.auth().currentUser && localStorage.getItem('showOnline') == 'true')
