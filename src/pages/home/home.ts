@@ -20,7 +20,8 @@ export class HomePage {
   // public lineChartLabels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   public lineChartLabels: Array<any> = [1, 2, 3, 4, 5, 6, 7];
   public lineChartOptions: any = {
-    responsive: true
+    responsive: true,
+    bezierCurve: false
   };
   public lineChartColors: Array<any> = [
     { // Gold

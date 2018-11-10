@@ -11,6 +11,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import * as firebase from 'firebase';
 import { UserInfoPage } from '../user-info/user-info';
 import { ImageModalPage } from '../image-modal/image-modal';
+import { LoginProvider } from '../../providers/login/login';
 
 /**
  * Generated class for the ChatOneToOnePage page.
@@ -43,6 +44,7 @@ export class ChatOneToOnePage {
   public conversationIdFromServer: any = {};
   public unreadMessage = 0;
   public totalMessageLength = 0;
+  public showMessageLength = 0;
   public chatUserImage = '';
 
   constructor(
@@ -58,6 +60,7 @@ export class ChatOneToOnePage {
     public actionSheet: ActionSheetController,
     public contacts: Contacts,
     public geolocation: Geolocation,
+    // public loginProvider: LoginProvider,
   ) {
     console.log('asidhflaisudhlfi');
   }
@@ -69,40 +72,32 @@ export class ChatOneToOnePage {
     this.loggedInUserId = firebase.auth().currentUser.uid;
 
     // Get friend details.
-    this.dataProvider.getUser(this.userId).snapshotChanges().subscribe((user) => {
-      this.userFromServer = user;
-      // console.log(user.payload.val());
-      this.title = this.userFromServer.payload.val().name;
-    });
-
-    this.angularfire.object('/accounts/' + this.userId + '/conversations/' + this.loggedInUserId).snapshotChanges().subscribe((chatUser) => {
-      this.chatUserFromServer = chatUser;
-      if (this.chatUserFromServer.payload.exists()) {
-        this.unreadMessage = this.chatUserFromServer.payload.val().messagesRead;
-      }
-    }, err => {
-      console.log(err);
-    });
-    this.dataProvider.getUser(this.userId).snapshotChanges().subscribe((result) => {
-      this.chatUserFromServer = result.payload.val();
-      console.log(this.chatUserFromServer);
-      console.log(this.chatUserFromServer.conversations);
-      this.chatUserImage = this.chatUserFromServer.img;
-      for (var key in this.chatUserFromServer.conversations) {
-        console.log(this.chatUserFromServer.conversations[key].messagesRead);
-        this.unreadMessage = this.chatUserFromServer.conversations[key].messagesRead;
-      }
-    }, err => {
-      console.log(err);
-    })
 
     // Get conversationInfo with friend.
     this.angularfire.object('/accounts/' + this.loggedInUserId + '/conversations/' + this.userId).snapshotChanges().subscribe((conversation) => {
       if (conversation.payload.exists()) {
         // console.log(conversation.payload.val());
         // User already have conversation with this friend, get conversation
+
         this.conversationIdFromServer = conversation;
         this.conversationId = this.conversationIdFromServer.payload.val().conversationId;
+
+        this.dataProvider.getUser(this.userId).snapshotChanges().subscribe((result) => {
+          this.chatUserFromServer = result.payload.val();
+          console.log(this.chatUserFromServer);
+          this.chatUserImage = this.chatUserFromServer.img;
+          this.title = this.chatUserFromServer.name;
+          for (var key in this.chatUserFromServer.conversations) {
+            console.log(this.conversationId);
+            console.log(key);
+            if (this.conversationId === this.chatUserFromServer.conversations[key].conversationId) {
+              console.log("messagesRead  " + key + this.chatUserFromServer.conversations[key].messagesRead);
+              this.unreadMessage = this.chatUserFromServer.conversations[key].messagesRead;
+            }
+          }
+        }, err => {
+          console.log(err);
+        });
 
         // Get conversation
         this.dataProvider.getConversationMessages(this.conversationId).snapshotChanges().subscribe((messagesRes) => {
@@ -111,51 +106,58 @@ export class ChatOneToOnePage {
           // console.log(this.messagesFromServer);
           if (this.messagesFromServer == null)
             this.messagesFromServer = [];
-          if (this.messages) {
-            // Just append newly added messages to the bottom of the view.
-            if (this.messagesFromServer.length > this.messages.length) {
-              let message = this.messagesFromServer[this.messagesFromServer.length - 1];
 
-              this.dataProvider.getUser(message.sender).snapshotChanges().subscribe((user) => {
-                this.userFromServer = user;
-                message.avatar = this.userFromServer.payload.val().img;
-              });
-              this.messages.push(message);
-              this.messagesToShow.push(message);
-            }
-          } else {
-            // Get all messages, this will be used as reference object for messagesToShow.
-            this.messages = [];
-            this.messagesFromServer.forEach((message) => {
-              this.dataProvider.getUser(message.sender).snapshotChanges().subscribe((user) => {
-                this.userFromServer = user;
-                message.avatar = this.userFromServer.payload.val().img;
-              });
-              this.messages.push(message);
+          this.messagesToShow = [];
+          // if (this.messages) {
+          //   // Just append newly added messages to the bottom of the view.
+          //   if (this.messagesFromServer.length > this.messages.length) {
+          //     let message = this.messagesFromServer[this.messagesFromServer.length - 1];
+
+          //     this.dataProvider.getUser(message.sender).snapshotChanges().subscribe((user) => {
+          //       this.userFromServer = user;
+          //       message.avatar = this.userFromServer.payload.val().img;
+          //     });
+          //     this.messages.push(message);
+          //     this.messagesToShow.push(message);
+          //   }
+          // } else {
+          // Get all messages, this will be used as reference object for messagesToShow.
+          this.messages = [];
+          this.messagesFromServer.forEach((message) => {
+            this.dataProvider.getUser(message.sender).snapshotChanges().subscribe((user) => {
+              this.userFromServer = user;
+              message.avatar = this.userFromServer.payload.val().img;
             });
-            // Load messages in relation to numOfMessages.
-            if (this.startIndex == -1) {
-              // Get initial index for numberOfMessages to show.
-              if ((this.messages.length - this.numberOfMessages) > 0) {
-                this.startIndex = this.messages.length - this.numberOfMessages;
-              } else {
-                this.startIndex = 0;
-              }
-            }
-            if (!this.messagesToShow) {
-              this.messagesToShow = [];
-            }
-            // Set messagesToShow
-            for (var i = this.startIndex; i < this.messages.length; i++) {
-              this.messagesToShow.push(this.messages[i]);
-            }
-            this.loadingProvider.hide();
+            this.messages.push(message);
+          });
+          // Load messages in relation to numOfMessages.
+          // if (this.startIndex == -1) {
+          //   // Get initial index for numberOfMessages to show.
+          //   if ((this.messages.length - this.numberOfMessages) > 0) {
+          //     this.startIndex = this.messages.length - this.numberOfMessages;
+          //   } else {
+          //     this.startIndex = 0;
+          //   }
+          // }
+          if (!this.messagesToShow) {
+            this.messagesToShow = [];
           }
+          // Set messagesToShow
+          for (var i = 0; i < this.messages.length; i++) {
+            this.messagesToShow.push(this.messages[i]);
+          }
+          this.loadingProvider.hide();
+          // }
           if (this.messages) {
             this.totalMessageLength = this.messages.length;
           }
-          console.log(this.totalMessageLength);
-          console.log(this.unreadMessage);
+          // this.showMessageLength = this.messagesToShow.length;
+          // if (this.totalMessageLength - this.unreadMessage > this.showMessageLength) {
+          //   this.loadPreviousMessages();
+          // } else {
+          //   const currentUnreadMessage = this.unreadMessage;
+          //   this.unreadMessage = this.showMessageLength - (this.totalMessageLength - currentUnreadMessage);
+          // }
           if (localStorage.getItem('loadMore') === 'loadMoreMessage') {
             this.scrollTop();
           } else {
@@ -227,17 +229,19 @@ export class ChatOneToOnePage {
 
   scrollBottom() {
 
+    let that = this;
     setTimeout(() => {
-      this.content.scrollToBottom();
+      that.content.scrollToBottom();
     }, 300);
-    this.setMessagesRead();
+    that.setMessagesRead();
   }
 
   // Scroll to top of the page after a short delay.
   scrollTop() {
+    let that = this;
     localStorage.setItem('loadMore', '');
     setTimeout(() => {
-      this.content.scrollToTop();
+      that.content.scrollToTop();
     }, 300);
   }
 

@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoginProvider } from '../../providers/login/login';
 import { SignupPage } from '../signup/signup';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 /**
  * Generated class for the SigninPage page.
@@ -31,20 +32,21 @@ export class SigninPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public loginProvider: LoginProvider
+    public loginProvider: LoginProvider,
+    public firebaseProvider: FirebaseProvider,
   ) {
     this.loginProvider.setNavController(this.navCtrl);
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SigninPage');
-    if (this.loginProvider.getCurrentLoggedUser() === "") {
-
-    } else {
-      this.userData.email = this.loginProvider.getCurrentLoggedUser().email;
-      this.userData.password = this.loginProvider.getCurrentLoggedUser().password;
-      this.loginProvider.emailLogin(this.userData.email, this.userData.password);
-    }
+    // if (this.loginProvider.getCurrentLoggedUser() === "") {
+    //   // this.firebaseProvider.setOfflineState();
+    // } else {
+    //   this.userData.email = this.loginProvider.getCurrentLoggedUser().email;
+    //   this.userData.password = this.loginProvider.getCurrentLoggedUser().password;
+    //   this.loginProvider.emailLogin(this.userData.email, this.userData.password);
+    // }
   }
 
   login(signinUser) {

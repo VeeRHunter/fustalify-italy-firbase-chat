@@ -24,7 +24,8 @@ export class FirebaseProvider {
   public friendsFromServer1: any = {};
   public friendsFromServer2: any = {};
 
-  constructor(public angularfire: AngularFireDatabase,
+  constructor(
+    public angularfire: AngularFireDatabase,
     public loadingProvider: LoadingProvider,
     public alertProvider: AlertProvider,
     public dataProvider: DataProvider,

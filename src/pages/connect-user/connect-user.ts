@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { AlertProvider } from '../../providers/alert/alert';
 import { ChatOneToOnePage } from '../chat-one-to-one/chat-one-to-one';
+import { LogoutProvider } from '../../providers/logout/logout';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 /**
  * Generated class for the ConnectUserPage page.
@@ -43,7 +45,10 @@ export class ConnectUserPage {
     public navParams: NavParams,
     public dataProvider: DataProvider,
     public loadingProvider: LoadingProvider,
-    public alertProvider: AlertProvider
+    public alertProvider: AlertProvider,
+    public alertCtrl: AlertController,
+    public logoutProvider: LogoutProvider,
+    public firebaseProvider: FirebaseProvider,
   ) {
   }
 
@@ -95,6 +100,25 @@ export class ConnectUserPage {
     console.log(this.newFriendsList[i]);
     let userId = this.newFriendsList[i].userId;
     this.navCtrl.push(ChatOneToOnePage, { userId: userId });
+  }
+
+  logout() {
+    this.alert = this.alertCtrl.create({
+      title: 'Confirm Logout',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Logout',
+          handler: data => {
+            // this.firebaseProvider.setOfflineState();
+            this.logoutProvider.logout();
+          }
+        }
+      ]
+    }).present();
   }
 
 }

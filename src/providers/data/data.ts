@@ -12,7 +12,9 @@ import { AngularFireDatabase } from 'angularfire2/database';
 @Injectable()
 export class DataProvider {
 
-  constructor(public angularfire: AngularFireDatabase) {
+  constructor(
+    public angularfire: AngularFireDatabase,
+  ) {
     console.log("Initializing Data Provider");
   }
 
